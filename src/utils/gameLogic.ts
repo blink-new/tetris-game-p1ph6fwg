@@ -18,12 +18,17 @@ export function isValidPosition(
         const boardX = tetromino.position.x + x;
         const boardY = tetromino.position.y + y;
         
-        // Check boundaries
-        if (boardX < 0 || boardX >= BOARD_WIDTH || boardY >= BOARD_HEIGHT) {
+        // Check horizontal boundaries
+        if (boardX < 0 || boardX >= BOARD_WIDTH) {
           return false;
         }
         
-        // Check collision with existing pieces (but allow negative Y for spawning)
+        // Check bottom boundary
+        if (boardY >= BOARD_HEIGHT) {
+          return false;
+        }
+        
+        // Check collision with existing pieces (only for visible board area)
         if (boardY >= 0 && board[boardY][boardX]) {
           return false;
         }

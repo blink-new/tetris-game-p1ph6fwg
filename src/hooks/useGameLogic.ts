@@ -44,8 +44,27 @@ export function useGameLogic() {
     setGameState(prev => {
       const newPiece = prev.nextPiece || createRandomTetromino();
       
-      // Check if new piece can be placed
-      if (!isValidPosition(prev.board, newPiece)) {
+      // Check if new piece can be placed - only check the parts that would be on the visible board
+      let canPlace = true;
+      for (let y = 0; y < newPiece.shape.length; y++) {
+        for (let x = 0; x < newPiece.shape[y].length; x++) {
+          if (newPiece.shape[y][x]) {
+            const boardX = newPiece.position.x + x;
+            const boardY = newPiece.position.y + y;
+            
+            // Only check collision for pieces that would appear on the visible board
+            if (boardY >= 0 && boardY < 20 && boardX >= 0 && boardX < 10) {
+              if (prev.board[boardY][boardX]) {
+                canPlace = false;
+                break;
+              }
+            }
+          }
+        }
+        if (!canPlace) break;
+      }
+      
+      if (!canPlace) {
         return {
           ...prev,
           gameOver: true,

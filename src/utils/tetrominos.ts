@@ -117,10 +117,16 @@ export const TETROMINO_TYPES: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', '
 
 export function createRandomTetromino(): Tetromino {
   const type = TETROMINO_TYPES[Math.floor(Math.random() * TETROMINO_TYPES.length)];
+  const shape = TETROMINO_SHAPES[type][0];
+  
+  // Calculate starting position - center horizontally and start above the board
+  const startX = Math.floor((10 - shape[0].length) / 2);
+  const startY = -shape.length; // Start above the visible board
+  
   return {
     type,
-    shape: TETROMINO_SHAPES[type][0],
-    position: { x: 3, y: 0 },
+    shape,
+    position: { x: startX, y: startY },
     rotation: 0
   };
 }
